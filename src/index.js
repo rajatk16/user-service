@@ -1,7 +1,5 @@
-/* eslint-disable import/no-unresolved */
 /* eslint-disable import/first */
 import mongoose from 'mongoose';
-import 'babel-dotenv';
 
 process.on('uncaughtException', err => {
   console.log('UNHANDLED EXCEPTION!');
@@ -9,7 +7,6 @@ process.on('uncaughtException', err => {
   process.exit(1);
 });
 
-console.log(process.env.JWT_SECRET);
 import app from './app';
 
 const DB_URI = process.env.DATABASE_URI.replace(

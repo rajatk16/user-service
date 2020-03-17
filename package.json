@@ -22,8 +22,7 @@
   },
   "scripts": {
     "build": "babel ./src --out-dir ./build",
-    "start": "nodemon --exec babel-node src/index.js",
-    "lint": "eslint ."
+    "start": "nodemon -r dotenv/config --exec babel-node src/index.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

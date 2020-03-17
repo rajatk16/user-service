@@ -1,6 +1,3 @@
-/* eslint-disable consistent-return */
-/* eslint-disable object-shorthand */
-/* eslint-disable func-names */
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import validator from 'validator';
@@ -66,6 +63,11 @@ UserSchema.pre('save', async function(next) {
   this.password = await bcrypt.hash(this.password, 12);
   this.passwordConfirm = undefined;
   next();
+});
+
+UserSchema.pre('save', async function(next) {
+  if (!this.isModified('password') || this.isNew) return next();
+  this.passwordChangedAt = Date.now() - 1000;
 });
 
 UserSchema.pre('update', async function(next) {

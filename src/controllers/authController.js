@@ -1,5 +1,6 @@
 /* eslint-disable prefer-destructuring */
 import { promisify } from 'util';
+import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import AppError from '../utils/AppError';
 import catchAsync from '../utils/catchAsync';
@@ -147,4 +148,33 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
       )
     );
   }
+});
+
+export const resetPassword = catchAsync(async (req, res, next) => {
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+
+  const user = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: {
+      $gt: Date.now()
+    }
+  });
+
+  if (!user) return next(new AppError('Token is invalid or expired', 400));
+
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+  await user.save();
+
+  const token = signToken(user._id);
+
+  res.status(200).json({
+    status: 'Success',
+    token
+  });
 });
