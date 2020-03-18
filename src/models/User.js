@@ -55,6 +55,14 @@ const UserSchema = new mongoose.Schema({
   },
   updatedAt: {
     type: Date
+  },
+  passwordChangedAt: {
+    type: Date
+  },
+  active: {
+    type: Boolean,
+    default: true,
+    select: false
   }
 });
 
@@ -67,11 +75,22 @@ UserSchema.pre('save', async function(next) {
 
 UserSchema.pre('save', async function(next) {
   if (!this.isModified('password') || this.isNew) return next();
-  this.passwordChangedAt = Date.now() - 1000;
+  this.passwordChangedAt = Date.now() - 10000;
+  this.updatedAt = Date.now();
+  next();
 });
 
 UserSchema.pre('update', async function(next) {
   this.updatedAt = Date.now();
+  next();
+});
+
+UserSchema.pre(/^find/, function(next) {
+  this.find({
+    active: {
+      $ne: false
+    }
+  });
   next();
 });
 

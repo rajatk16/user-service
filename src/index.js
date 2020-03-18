@@ -14,6 +14,8 @@ const DB_URI = process.env.DATABASE_URI.replace(
   process.env.DATABASE_PASSWORD
 );
 
+console.log(typeof process.env.JWT_EXPIRES_IN);
+
 mongoose
   .connect(DB_URI, {
     useNewUrlParser: true,

@@ -19,6 +19,18 @@ const signToken = id => {
   );
 };
 
+const createSendToken = (user, status, res) => {
+  const token = signToken(user._id);
+
+  res.status(status).json({
+    message: 'Success',
+    token,
+    data: {
+      user
+    }
+  });
+};
+
 export const signUp = catchAsync(async (req, res, next) => {
   const { firstName, lastName, email, password, passwordConfirm } = req.body;
   const newUser = await User.create({
@@ -29,15 +41,7 @@ export const signUp = catchAsync(async (req, res, next) => {
     passwordConfirm
   });
 
-  const token = signToken(newUser._id);
-
-  res.status(201).json({
-    message: 'Success',
-    token,
-    data: {
-      user: newUser
-    }
-  });
+  createSendToken(newUser, 201, res);
 });
 
 export const login = catchAsync(async (req, res, next) => {
@@ -56,12 +60,7 @@ export const login = catchAsync(async (req, res, next) => {
     return next(new AppError('Incorrect email or password'), 401);
   }
 
-  const token = signToken(user._id);
-
-  res.status(200).json({
-    status: 'Success',
-    token
-  });
+  createSendToken(user, 200, res);
 });
 
 export const protect = catchAsync(async (req, res, next) => {
@@ -82,10 +81,10 @@ export const protect = catchAsync(async (req, res, next) => {
     return next(
       new AppError('The User belonging to this token no longer exists', 401)
     );
-  if (freshUser.changedPasswordAfter(decoded.iat))
-    return next(
-      new AppError('Password recently changed! Please login again', 401)
-    );
+  // if (freshUser.changedPasswordAfter(decoded.iat))
+  //   return next(
+  //     new AppError('Password recently changed! Please login again', 401)
+  //   );
   req.user = freshUser;
   next();
 });
@@ -171,10 +170,21 @@ export const resetPassword = catchAsync(async (req, res, next) => {
   user.passwordResetExpires = undefined;
   await user.save();
 
-  const token = signToken(user._id);
+  createSendToken(user, 200, res);
+});
 
-  res.status(200).json({
-    status: 'Success',
-    token
-  });
+export const updatePassword = catchAsync(async (req, res, next) => {
+  // Get user from the collection
+  const user = await User.findById(req.user.id).select('+password');
+
+  if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+    return next(new AppError('Your current password is wrong'));
+  }
+  // Check if password is correct
+  // If yes then update the password
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save();
+  // Log user in, and send JWT
+  createSendToken(user, 200, res);
 });
