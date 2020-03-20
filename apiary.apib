@@ -1,0 +1,395 @@
+# User API
+
+This API handles the User authentication and authorization for Infovision's E-Commerce Engine
+
+NOTE: This is API is still under review
+
+## Group Auth
+These routes can be used to signup, login, and reset password
+
+### SignUp [POST /api/v1/auth/signup]
+This route will take input from the user and create a record of the User in the Database
+
++ firstName (string) - User's first name
++ lastName (string) - User's last name
++ email (string) - User's email
++ password (string) - User's password
++ passwordConfirm (string) - User's password again
+
++ Request
+    + Headers
+        Content-Type: application/json
+    + Body
+        {
+            "firstName": "Rajat",
+            "lastName": "Sudagade",
+            "email": "test@test.com",
+            "password": "password123",
+            "passwordConfirm": "password123"
+        }
+
++ Response 201
+    + Headers
+        X-DNS-Prefetch-Control: off
+        X-Frame-Options: SAMEORIGIN
+        Strict-Transport-Security: max-age=15552000; includeSubDomains
+        X-Download-Options: noopen
+        X-Content-Type-Options: nosniff
+        X-XSS-Protection: 1; mode=block
+        X-RateLimit-Limit: 100
+        X-RateLimit-Remaining: 99
+        Date: Thu, 19 Mar 2020 21:21:43 GMT
+        X-RateLimit-Reset: 1584656457
+        Set-Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNzNlMjY3ZDUwNjEwMjc4ODNiNmY4NyIsImlhdCI6MTU4NDY1MjkwNCwiZXhwIjoxNTg1NTE2OTA0fQ.6F3T0dEGlIaAC0DuwggVss2zw59B5ccxObxo_CoaJDU; Path=/; Expires=Wed, 17 Jun 2020 21:21:44 GMT; HttpOnly
+        Content-Type: application/json; charset=utf-8
+        Content-Length: 396
+        ETag: W/"18c-AWbGPkrLRmLWuvuOkUnAo1FZD3M"
+        Connection: keep-alive
+    + Body
+        {
+            "message": "Success",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNzNlMjY3ZDUwNjEwMjc4ODNiNmY4NyIsImlhdCI6MTU4NDY1MjkwNCwiZXhwIjoxNTg1NTE2OTA0fQ.6F3T0dEGlIaAC0DuwggVss2zw59B5ccxObxo_CoaJDU",
+            "data": {
+                "user": {
+                    "role": "user",
+                    "createdAt": "2020-03-19T21:20:56.671Z",
+                    "active": true,
+                    "_id": "5e73e267d5061027883b6f87",
+                    "firstName": "rajat",
+                    "lastName": "sudagade",
+                    "email": "test@test.com",
+                    "__v": 0
+                }
+            }
+        }
+
+### Login [POST /api/v1/auth/login]
+This route will help user login to the application. The route will take email and password as input
+
++ email (string) - User's email
++ password (string) - User's password
+
++ Request
+    + Headers
+        Content-Type: application/json
+    + Body
+        {
+            "email": "test@test.com"
+            "password": "password123"
+        }
++ Response 200
+    + Headers
+        X-DNS-Prefetch-Control: off
+        X-Frame-Options: SAMEORIGIN
+        Strict-Transport-Security: max-age=15552000; includeSubDomains
+        X-Download-Options: noopen
+        X-Content-Type-Options: nosniff
+        X-XSS-Protection: 1; mode=block
+        X-RateLimit-Limit: 100
+        X-RateLimit-Remaining: 95
+        Date: Thu, 19 Mar 2020 21:46:41 GMT
+        X-RateLimit-Reset: 1584656457
+        Set-Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNzNlODJmZDUwNjEwMjc4ODNiNmY4OCIsImlhdCI6MTU4NDY1NDQwMiwiZXhwIjoxNTg1NTE4NDAyfQ.BDQ7u8hxkJnEUIy3yDfa1bkSfGNyINPzx1GpIFGdI8Q; Path=/; Expires=Wed, 17 Jun 2020 21:46:42 GMT; HttpOnly
+        Content-Type: application/json; charset=utf-8
+        Content-Length: 381
+        ETag: W/"17d-mEChi520/6hTMwRwID6/F1X/UYo"
+        Connection: keep-alive
+    + Body
+        {
+            "message": "Success",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNzNlODJmZDUwNjEwMjc4ODNiNmY4OCIsImlhdCI6MTU4NDY1NDQwMiwiZXhwIjoxNTg1NTE4NDAyfQ.BDQ7u8hxkJnEUIy3yDfa1bkSfGNyINPzx1GpIFGdI8Q",
+            "data": {
+                "user": {
+                    "role": "user",
+                    "createdAt": "2020-03-19T21:20:56.671Z",
+                    "_id": "5e73e82fd5061027883b6f88",
+                    "firstName": "rajat",
+                    "lastName": "sudagade",
+                    "email": "test@test.com",
+                    "__v": 0
+                }
+            }
+        }
+
+### Forgot Password [POST /api/v1/auth/forgotPassword]
+Route to notify server that user cannot login. This route will only take user's email in request body.
+
++ email (string) - User's email
+
++ Request
+    + Headers
+        Content-Type: application/json
+    + Body
+        {
+            "email": "test@test.com"
+        }
++ Response 200
+    + Headers
+        X-DNS-Prefetch-Control: off
+        X-Frame-Options: SAMEORIGIN
+        Strict-Transport-Security: max-age=15552000; includeSubDomains
+        X-Download-Options: noopen
+        X-Content-Type-Options: nosniff
+        X-XSS-Protection: 1; mode=block
+        X-RateLimit-Limit: 100
+        X-RateLimit-Remaining: 94
+        Date: Thu, 19 Mar 2020 21:56:33 GMT
+        X-RateLimit-Reset: 1584656457
+        Content-Type: application/json; charset=utf-8
+        Content-Length: 59
+        ETag: W/"3b-bkOzvmpc+JAbMa2MQq5diJPQOF8"
+        Connection: keep-alive
+    + Body
+        {
+            "status": "Success",
+            "message": "Token sent to user's email"
+        }
+    
+### Reset Password [PATCH /api/v1/auth/resetPassword/:token]
+Route to reset the password using the token sent to user's email.
+
++ Parameters
+    + token: 19a17fef3a3317a85a55e6448bba6289f5d5f3bf202851fa92bfcaf8751911d8 - Token sent to user's email
+
++ password (string) - New password
++ passwordConfirm (string) - New password again
+
++ Request
+    + Headers
+        Content-Type: application/json
+    + Body
+        {
+            "password": "password456",
+            "passwordConfirm": "password456"
+        }
++ Response 200
+    + Headers
+        X-DNS-Prefetch-Control: off
+        X-Frame-Options: SAMEORIGIN
+        Strict-Transport-Security: max-age=15552000; includeSubDomains
+        X-Download-Options: noopen
+        X-Content-Type-Options: nosniff
+        X-XSS-Protection: 1; mode=block
+        X-RateLimit-Limit: 100
+        X-RateLimit-Remaining: 98
+        Date: Fri, 20 Mar 2020 00:46:02 GMT
+        X-RateLimit-Reset: 1584666041
+        Set-Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNzNlODJmZDUwNjEwMjc4ODNiNmY4OCIsImlhdCI6MTU4NDY2NTE2MywiZXhwIjoxNTg1NTI5MTYzfQ._8r5RVv7-M4WeSf-LJYdDG_PK8mKnh37Zf-NrvQmE0w; Path=/; Expires=Thu, 18 Jun 2020 00:46:03 GMT; HttpOnly
+        Content-Type: application/json; charset=utf-8
+        Content-Length: 467
+        ETag: W/"1d3-x25f07XK7SsknHNUx5HBH1OxP9c"
+        Connection: keep-alive
+    + Body
+        {
+            "message": "Success",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNzNlODJmZDUwNjEwMjc4ODNiNmY4OCIsImlhdCI6MTU4NDY2NTE2MywiZXhwIjoxNTg1NTI5MTYzfQ._8r5RVv7-M4WeSf-LJYdDG_PK8mKnh37Zf-NrvQmE0w",
+            "data": {
+                "user": {
+                    "role": "user",
+                    "createdAt": "2020-03-19T21:20:56.671Z",
+                    "_id": "5e73e82fd5061027883b6f88",
+                    "firstName": "rajat",
+                    "lastName": "sudagade",
+                    "email": "test@test.com",
+                    "__v": 0,
+                    "passwordChangedAt": "2020-03-20T00:46:02.048Z",
+                    "updatedAt": "2020-03-20T00:46:03.048Z"
+                }
+            }
+        }
+
+### Update Password [PATCH /api/v1/auth/updateMyPassword]
+Route to update the User's password
+
++ passwordCurrent (string) - User's current password
++ password (string) - User's new password
++ passwordConfirm (string) - User's new password again
+
++ Request
+    + Headers
+        Content-Type: application/json
+        Authorization: Bearer {{token}}
+    + Body
+        {
+            "passwordCurrent": "password456",
+            "password": "password123",
+            "passwordConfirm": "password123"
+        }
++ Response
+    + Headers
+        X-DNS-Prefetch-Control: off
+        X-Frame-Options: SAMEORIGIN
+        Strict-Transport-Security: max-age=15552000; includeSubDomains
+        X-Download-Options: noopen
+        X-Content-Type-Options: nosniff
+        X-XSS-Protection: 1; mode=block
+        X-RateLimit-Limit: 100
+        X-RateLimit-Remaining: 95
+        Date: Fri, 20 Mar 2020 01:25:34 GMT
+        X-RateLimit-Reset: 1584669166
+        Set-Cookie: jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNzNlODJmZDUwNjEwMjc4ODNiNmY4OCIsImlhdCI6MTU4NDY2NzUzNSwiZXhwIjoxNTg1NTMxNTM1fQ.pBXF7U8RwOOldg5iT2S8jxRQALs6eI6CFT7Xq_24Vvs; Path=/; Expires=Thu, 18 Jun 2020 01:25:35 GMT; HttpOnly
+        Content-Type: application/json; charset=utf-8
+        Content-Length: 467
+        ETag: W/"1d3-60c9AKBu5kMU26bKDJkEiEzjKeI"
+        Connection: keep-alive
+    + Body
+        {
+            "message": "Success",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlNzNlODJmZDUwNjEwMjc4ODNiNmY4OCIsImlhdCI6MTU4NDY2NzUzNSwiZXhwIjoxNTg1NTMxNTM1fQ.pBXF7U8RwOOldg5iT2S8jxRQALs6eI6CFT7Xq_24Vvs",
+            "data": {
+                "user": {
+                    "role": "user",
+                    "createdAt": "2020-03-19T21:20:56.671Z",
+                    "_id": "5e73e82fd5061027883b6f88",
+                    "firstName": "rajat",
+                    "lastName": "sudagade",
+                    "email": "test@test.com",
+                    "__v": 0,
+                    "passwordChangedAt": "2020-03-20T01:25:34.530Z",
+                    "updatedAt": "2020-03-20T01:25:35.531Z"
+                }
+            }
+        }
+
+## Group User
+Routes that get all Users, Get User By ID, Update User Data, and Delete User's Record in DB
+
+### Fetch All Users [GET /api/v1/users/]
+Fetch all active users from the DB
+
++ Response 200
+    + Headers
+        X-DNS-Prefetch-Control: off
+        X-Frame-Options: SAMEORIGIN
+        Strict-Transport-Security: max-age=15552000; includeSubDomains
+        X-Download-Options: noopen
+        X-Content-Type-Options: nosniff
+        X-XSS-Protection: 1; mode=block
+        X-RateLimit-Limit: 100
+        X-RateLimit-Remaining: 94
+        Date: Fri, 20 Mar 2020 01:30:14 GMT
+        X-RateLimit-Reset: 1584669166
+        Content-Type: application/json; charset=utf-8
+        Content-Length: 451
+        ETag: W/"1c3-+1EO2rqwVFTLAfM7d8VYCK/5+fY"
+        Connection: keep-alive
+    + Body
+        {
+            "message": "Success",
+            "data": {
+                "users": [
+                    {
+                        "role": "user",
+                        "createdAt": "2020-03-19T21:20:56.671Z",
+                        "_id": "5e73e267d5061027883b6f87",
+                        "firstName": "rajat",
+                        "lastName": "sudagade",
+                        "email": "test1@test.com",
+                        "__v": 0
+                    },
+                    {
+                        "role": "user",
+                        "createdAt": "2020-03-19T21:20:56.671Z",
+                        "_id": "5e73e82fd5061027883b6f88",
+                        "firstName": "rajat",
+                        "lastName": "sudagade",
+                        "email": "test@test.com",
+                        "__v": 0,
+                        "passwordChangedAt": "2020-03-20T01:25:34.530Z",
+                        "updatedAt": "2020-03-20T01:25:35.531Z"
+                    }
+                ]
+            }
+        }
+
+### Fetch User By ID [GET /api/v1/users/:id]
+Fetch details of a particular user from the DB whose ID matches the one in user request
+
++ Parameter
+    + id: 5e73e267d5061027883b6f87 - ID of a USER
+
++ Response 200
+    + Headers
+        X-DNS-Prefetch-Control: off
+        X-Frame-Options: SAMEORIGIN
+        Strict-Transport-Security: max-age=15552000; includeSubDomains
+        X-Download-Options: noopen
+        X-Content-Type-Options: nosniff
+        X-XSS-Protection: 1; mode=block
+        X-RateLimit-Limit: 100
+        X-RateLimit-Remaining: 93
+        Date: Fri, 20 Mar 2020 01:34:09 GMT
+        X-RateLimit-Reset: 1584669166
+        Content-Type: application/json; charset=utf-8
+        Content-Length: 199
+        ETag: W/"c7-S+ElUs7axH0tObVG2utkwtXlsK0"
+        Connection: keep-alive
+    + Body
+        {
+            "status": "Success",
+            "data": {
+                "user": {
+                    "role": "user",
+                    "createdAt": "2020-03-19T21:20:56.671Z",
+                    "_id": "5e73e267d5061027883b6f87",
+                    "firstName": "rajat",
+                    "lastName": "sudagade",
+                    "email": "test1@test.com",
+                    "__v": 0
+                }
+            }
+        }
+
+### Update logged in User's data [PATCH /api/v1/users/updateMe]
+Update a user's data
+
++ Request
+    + Headers
+        Content-Type: application/json
+        Authorization: Bearer {{token}}
+    + Body
+        {
+            "firstName": "raj"
+        }
+    + Response
+        + Headers
+            X-DNS-Prefetch-Control: off
+            X-Frame-Options: SAMEORIGIN
+            Strict-Transport-Security: max-age=15552000; includeSubDomains
+            X-Download-Options: noopen
+            X-Content-Type-Options: nosniff
+            X-XSS-Protection: 1; mode=block
+            X-RateLimit-Limit: 100
+            X-RateLimit-Remaining: 93
+            Date: Fri, 20 Mar 2020 01:34:09 GMT
+            X-RateLimit-Reset: 1584669166
+            Content-Type: application/json; charset=utf-8
+            Content-Length: 199
+            ETag: W/"c7-S+ElUs7axH0tObVG2utkwtXlsK0"
+            Connection: keep-alive
+        + Body
+            {
+                "status": "success",
+                "data": {
+                    "user": {
+                        "role": "user",
+                        "createdAt": "2020-03-19T04:28:55.996Z",
+                        "_id": "5e72f5621e91ed05d41f9b39",
+                        "firstName": "raj",
+                        "lastName": "sudagade",
+                        "email": "test1@test.com",
+                        "__v": 0,
+                        "passwordChangedAt": "2020-03-19T04:39:42.484Z",
+                        "updatedAt": "2020-03-19T04:32:50.437Z"
+                    }
+                }
+            }
+            
+### Delete Logged In User [DELETE /api/v1/users/deleteMe]
+Delete the Logged In User from DB
+
++ Request
+    + Headers
+        Authorization: Bearer {{token}}
+  
++ Response 204
